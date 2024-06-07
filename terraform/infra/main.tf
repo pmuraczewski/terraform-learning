@@ -4,26 +4,17 @@ resource "azurerm_resource_group" "resource_group" {
   location = var.location
 }
 
-# Create a storeage account
-resource "azurerm_storage_account" "storage_account" {
-  name                     = var.storage_account_name
-  resource_group_name      = azurerm_resource_group.resource_group.name
-  location                 = azurerm_resource_group.resource_group.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  account_kind             = "StorageV2"
+# Create a sql server
+resource "azurerm_mssql_server" "sql_server" {
+  name                          = var.sql_server_name
+  resource_group_name           = azurerm_resource_group.resource_group.name
+  location                      = azurerm_resource_group.resource_group.location
+  version                       = "12.0"
+  administrator_login           = var.sql_server_admin_username
+  administrator_login_password  = var.sql_server_admin_password
 
-  static_website {
-    index_document = "index.html"
+  azuread_administrator {
+    login_username = var.sql_server_admin_aad_username
+    object_id = var.sql_server_admin_aad_objectid
   }
-}
-
-# Add an index.html file
-resource "azurerm_storage_blob" "blob" {
-  name                   = "index.html"
-  storage_account_name   = azurerm_storage_account.storage_account.name
-  storage_container_name = "$web"
-  type                   = "Block"
-  content_type           = "text/html"
-  source_content         = var.source_content
 }
