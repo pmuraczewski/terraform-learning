@@ -1,0 +1,6 @@
+# VS
+.vs/*
+
+src/ExampleWebApplication/.vs/*
+src/ExampleWebApplication/ExampleWebApplication/bin/*
+src/ExampleWebApplication/ExampleWebApplication/obj/*
