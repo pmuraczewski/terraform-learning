@@ -47,4 +47,9 @@ jobs:
         BRANCH_COVERAGE=$(grep -oPm1 "(?<=branch-rate=\")[^\"]+" ./CoverageReport/Cobertura.xml)
         BRANCH_COVERAGE=$(echo "$BRANCH_COVERAGE * 100" | bc -l)
         echo "Branch coverage is $BRANCH_COVERAGE%"
+
+        if (( $(echo "$LINE_COVERAGE < $COVERAGE_THRESHOLD" | bc -l) )); then
+          echo "Line coverage is less than $COVERAGE_THRESHOLD%"
+          exit 1
+        fi
       working-directory: 'src/ExampleWebApplication'
